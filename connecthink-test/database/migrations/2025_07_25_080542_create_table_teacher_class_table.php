@@ -12,9 +12,9 @@ return new class extends Migration
 
         Schema::create('table_teacher_class', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('id_teacher');
+            $table->unsignedInteger('id_teacher')->nullable();
             $table->foreign('id_teacher')->references('id_teacher')->on('table_teachers')->onDelete('set null');
-            $table->unsignedInteger('id_class');
+            $table->unsignedInteger('id_class')->nullable();
             $table->foreign('id_class')->references('id_class')->on('table_class')->onDelete('set null');
             $table->dateTime('created_at');
             $table->dateTime('edited_at');

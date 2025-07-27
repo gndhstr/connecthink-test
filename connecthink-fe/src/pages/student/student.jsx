@@ -172,7 +172,6 @@ const Student = () => {
       <div className="flex justify-between items-center mb-4 mt-10">
         <h1 className="text-xl font-bold">Student Management</h1>
         <div className="flex items-center gap-4">
-          {/* Tambahkan dropdown filter di sini */}
           <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-md shadow-sm border">
             <FaFilter className="text-gray-500" />
             <select

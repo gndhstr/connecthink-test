@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nis_student');
             $table->string('name');
-            $table->unsignedInteger('id_class');
+            $table->unsignedInteger('id_class')->nullable();
             $table->foreign('id_class')->references('id_class')->on('table_class')->onDelete('set null');
             $table->dateTime('created_at');
             $table->dateTime('edited_at');

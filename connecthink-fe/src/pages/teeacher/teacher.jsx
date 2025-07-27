@@ -369,7 +369,6 @@ const Teacher = () => {
         </div>
       )}
 
-      {/* Confirm Delete Modal */}
       <ConfirmModal
         show={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
