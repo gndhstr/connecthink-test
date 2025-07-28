@@ -1,4 +1,4 @@
-import { FaHome, FaUserGraduate, FaChalkboardTeacher, FaBook, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaUserGraduate, FaChalkboardTeacher, FaBook, FaSignOutAlt, FaClipboardList} from 'react-icons/fa';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { logoutUser } from '../../api/users';
@@ -18,14 +18,14 @@ const FloatingNav = () => {
 
   const navItems = [
     { path: '/', icon: <FaHome size={20} />, label: 'Home' },
-    { path: '/student', icon: <FaUserGraduate size={20} />, label: 'Siswa' },
-    { path: '/teacher', icon: <FaChalkboardTeacher size={20} />, label: 'Guru' },
-    { path: '/class', icon: <FaBook size={20} />, label: 'Kelas' },
+    { path: '/list', icon: <FaClipboardList size={20} />, label: 'List' },
+    { path: '/class', icon: <FaBook size={20} />, label: 'Class' },
+    { path: '/student', icon: <FaUserGraduate size={20} />, label: 'Students' },
+    { path: '/teacher', icon: <FaChalkboardTeacher size={20} />, label: 'Teachers' },
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white shadow-xl rounded-full border border-gray-200 z-50 px-4 py-2 flex items-center">
-      {/* Navigation Items */}
+    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white shadow-xl rounded-full border border-gray-200 z-50 px-4 py-2 flex flex-wrap items-center">
       <div className="flex space-x-4">
         {navItems.map((item) => (
           <NavLink
@@ -42,8 +42,6 @@ const FloatingNav = () => {
           </NavLink>
         ))}
       </div>
-      
-      {/* Logout Button with Separator */}
       <div className="flex items-center">
         <div className="h-8 w-px bg-gray-300 mx-4"></div>
         <button 

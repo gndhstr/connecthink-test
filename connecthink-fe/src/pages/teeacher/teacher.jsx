@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaPlus, FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown, FaTimes } from 'react-icons/fa';
+import {FaArrowLeft, FaPlus, FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown, FaTimes } from 'react-icons/fa';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import Notification from '@/components/ui/Notification';
 
@@ -96,7 +96,7 @@ const Teacher = () => {
       setForm({ 
         name: teacher.name, 
         nip_teacher: teacher.nip_teacher, 
-        id_class: teacher.id_class 
+        id_class: teacher.class_relation?.class_detail?.id_class || '' 
       });
       setEditingId(teacher.id_teacher);
     } else {
@@ -105,6 +105,7 @@ const Teacher = () => {
     }
     setShowModal(true);
   };
+  
 
   const closeModal = () => {
     setShowModal(false);
@@ -119,10 +120,10 @@ const Teacher = () => {
     try {
       if (editingId) {
         await axios.put(`http://127.0.0.1:8000/api/teacher/${editingId}`, form);
-        showNotification('Data Teacher berhasil diperbarui', 'success');
+        showNotification('Data Teacher successfully updated', 'success');
       } else {
         await axios.post('http://127.0.0.1:8000/api/teacher', form);
-        showNotification('Data Teacher berhasil ditambahkan', 'success');
+        showNotification('Data Teacher successfully added', 'success');
       }
       fetchTeachers();
       closeModal();
@@ -180,7 +181,12 @@ const Teacher = () => {
       />
 
       <div className="flex justify-between items-center mb-4 mt-10">
-        <h1 className="text-xl font-bold">Teacher Management</h1>
+        <div className='flex gap-3'>
+          <button onClick={() => window.history.back()} className="flex items-center gap-2 text-blue-600 hover:underline">
+            <FaArrowLeft/>
+          </button>
+          <h1 className="text-xl font-bold">Teacher Management</h1>
+        </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-md shadow-sm border">
             <select
@@ -301,7 +307,6 @@ const Teacher = () => {
         </div>
       </div>
 
-      {/* Form Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">

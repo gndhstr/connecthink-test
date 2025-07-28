@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\TeacherModel;
 use App\Models\TeacherClassModel;
 use App\Models\ClassModel;
+use Illuminate\Validation\Rule;
 
 class TeachersController extends Controller
 {
@@ -63,10 +64,13 @@ class TeachersController extends Controller
         }
 
         $data = $request->validate([
-            'nip_teacher' => 'required|string',
+            'nip_teacher' => [
+                'required',
+                Rule::unique('table_teachers', 'nip_teacher')->ignore($teacher->id_teacher, 'id_teacher')
+            ],
             'name' => 'required|string',
             'id_class' => 'required|exists:table_class,id_class',
-        ]);
+        ]);        
 
         $timestamp = now();
 
@@ -76,10 +80,21 @@ class TeachersController extends Controller
             'edited_at' => $timestamp,
         ]);
 
-        TeacherClassModel::where('id_teacher', $teacher->id_teacher)->update([
-            'id_class' => $data['id_class'],
-            'edited_at' => $timestamp,
-        ]);
+        $teacherClass = TeacherClassModel::where('id_teacher', $teacher->id_teacher)->first();
+
+        if ($teacherClass) {
+            $teacherClass->update([
+                'id_class' => $data['id_class'],
+                'edited_at' => $timestamp,
+            ]);
+        } else {
+            TeacherClassModel::create([
+                'id_teacher' => $teacher->id_teacher,
+                'id_class' => $data['id_class'],
+                'created_at' => $timestamp,
+                'edited_at' => $timestamp,
+            ]);
+        }
 
         return response()->json([
             'status' => true,

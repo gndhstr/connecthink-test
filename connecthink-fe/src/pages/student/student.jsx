@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaEdit, FaTrash, FaPlus, FaSort, FaSortUp, FaSortDown, FaTimes, FaFilter } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit, FaTrash, FaPlus, FaSort, FaSortUp, FaSortDown, FaTimes, FaFilter } from 'react-icons/fa';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import Notification from '@/components/ui/Notification';
 
@@ -170,7 +170,12 @@ const Student = () => {
       <Notification {...notification} />
 
       <div className="flex justify-between items-center mb-4 mt-10">
-        <h1 className="text-xl font-bold">Student Management</h1>
+        <div className='flex gap-3'>
+        <button onClick={() => window.history.back()} className="flex items-center gap-2 text-blue-600 hover:underline">
+          <FaArrowLeft/>
+        </button>
+          <h1 className="text-xl font-bold">Student Management</h1>
+        </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-md shadow-sm border">
             <FaFilter className="text-gray-500" />
@@ -233,7 +238,7 @@ const Student = () => {
                 <td className="px-6 py-4 whitespace-nowrap">{student.name}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{student.nis_student}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {classes.find(c => c.id_class === student.id_class)?.name_class || '-'}
+                  {classes.find(cls => cls.id_class === student.id_class)?.name_class || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap flex gap-2">
                   <button

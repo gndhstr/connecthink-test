@@ -12,7 +12,10 @@ import Class from "./pages/class/class";
 import Dashboard from "./pages/dashboard/dashboard";
 import Student from "./pages/student/student";
 import Teacher from "./pages/teeacher/teacher";
+import ViewTeacher from "./pages/teeacher/viewTeacher";
+import ViewStudent from "./pages/student/viewStudent";
 import FloatingNav from "./components/navbar/navbar";
+import ViewStudentTeacher from "./pages/combined/viewCombined";
 
 const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -52,8 +55,11 @@ const AppRoutes = () => {
           
           <Route path="/" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
           <Route path="/class" element={isAuthenticated ? <Class /> : <Navigate to="/login" replace />} />
-          <Route path="/student" element={isAuthenticated ? <Student /> : <Navigate to="/login" replace />} />
-          <Route path="/teacher" element={isAuthenticated ? <Teacher /> : <Navigate to="/login" replace />} />
+          <Route path="/student" element={isAuthenticated ? <ViewStudent /> : <Navigate to="/login" replace />} />
+          <Route path="/students/manage" element={isAuthenticated ? <Student /> : <Navigate to="/login" replace />} />
+          <Route path="/teacher" element={isAuthenticated ? <ViewTeacher /> : <Navigate to="/login" replace />} />
+          <Route path="/teachers/manage" element={isAuthenticated ? <Teacher /> : <Navigate to="/login" replace />} />
+          <Route path="/list" element={isAuthenticated ? <ViewStudentTeacher /> : <Navigate to="/login" replace />} />
         </Routes>
       </div>
 

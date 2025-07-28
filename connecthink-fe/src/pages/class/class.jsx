@@ -14,6 +14,7 @@ const Class = () => {
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [showTeacherModal, setShowTeacherModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
+  const [fieldError, setFieldError] = useState('');
   
   const fetchStudentsByClass = async (classId) => {
       try {
@@ -88,6 +89,7 @@ const Class = () => {
   };
 
   const openModal = (item = null) => {
+    setFieldError('');
     if (item) {
       setNameClass(item.name_class);
       setEditingId(item.id_class);
@@ -106,29 +108,38 @@ const Class = () => {
     e.preventDefault();
     try {
       if (!nameClass.trim()) {
-        showNotification('Nama kelas tidak boleh kosong', 'error');
+        showNotification('cant be empty', 'error');
         return;
       }
-      
+  
       if (editingId) {
         await axios.put(`http://127.0.0.1:8000/api/class/${editingId}`, {
           name_class: nameClass,
         });
-        showNotification('Class successfuly updated', 'success');
+        showNotification('Class successfully changed', 'success');
       } else {
         await axios.post('http://127.0.0.1:8000/api/class', {
           name_class: nameClass,
         });
-        showNotification('Class successfuly added', 'success');
+        showNotification('Class successfully added', 'success');
       }
+  
       fetchClasses();
       closeModal();
     } catch (err) {
-      console.error('Error saving data', err);
-      showNotification('Gagal menyimpan data kelas', 'error');
+      if (err.response?.status === 422) {
+        const errorMsg = err.response.data?.errors?.name_class?.[0] || 'Validasi gagal';
+        setFieldError(errorMsg);
+        showNotification(errorMsg, 'error');
+      } else {
+        console.error('Error saving data', err);
+        showNotification('Error saving data', 'error');
+      }
     }
   };
 
+
+  
   const openDeleteConfirm = (id) => {
     setItemToDelete(id);
     setShowConfirmModal(true);
@@ -289,6 +300,7 @@ const Class = () => {
                 className="w-full border p-2 rounded"
                 required
               />
+              {fieldError && <p className="text-red-500 text-sm">{fieldError}</p>}
               <div className="flex justify-end gap-2">
                 <button 
                   type="button" 
@@ -314,7 +326,7 @@ const Class = () => {
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
         title="Konfirmasi Hapus"
-        message="Do you reallyu want to delete this class?"
+        message="Do you really want to delete this class?"
       />
     </div>
   );
