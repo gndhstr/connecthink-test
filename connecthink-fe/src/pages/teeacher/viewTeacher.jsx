@@ -114,6 +114,9 @@ const ViewTeacher = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Clasess
+              </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
                 onClick={() => requestSort('name')}
@@ -132,22 +135,27 @@ const ViewTeacher = () => {
                   <span className="ml-1">{getSortIcon('nip_teacher')}</span>
                 </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Clasess
-              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {teachers.map((teacher) => (
-              <tr key={teacher.id_teacher}>
-                <td className="px-6 py-4 whitespace-nowrap">{teacher.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{teacher.nip_teacher}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {teacher.class_relation?.class_detail?.name_class || '-'}
-                </td>
-              </tr>
-            ))}
+            {Object.entries(
+              teachers.reduce((acc, teacher) => {
+                const className = teacher.class_relation?.class_detail?.name_class || 'Unknown';
+                if (!acc[className]) acc[className] = [];
+                acc[className].push(teacher);
+                return acc;
+              }, {})
+            ).map(([className, teacherList]) =>
+              teacherList.map((teacher, idx) => (
+                <tr key={teacher.id_teacher}>
+                  <td className="px-6 py-4 whitespace-nowrap">{idx === 0 ? className : ''}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{teacher.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{teacher.nip_teacher}</td>
+                </tr>
+              ))
+            )}
           </tbody>
+
         </table>
       </div>
 

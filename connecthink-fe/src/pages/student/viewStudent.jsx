@@ -115,6 +115,15 @@ const ViewStudent = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
+                onClick={() => requestSort('name_class')}
+              >
+                <div className="flex items-center">
+                  Class
+                  <span className="ml-1">{getSortIcon('name_class')}</span>
+                </div>
+              </th>
+              <th 
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
                 onClick={() => requestSort('name')}
               >
                 <div className="flex items-center">
@@ -131,31 +140,32 @@ const ViewStudent = () => {
                   <span className="ml-1">{getSortIcon('nis_student')}</span>
                 </div>
               </th>
-              <th 
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer"
-                onClick={() => requestSort('name_class')}
-              >
-                <div className="flex items-center">
-                  Class
-                  <span className="ml-1">{getSortIcon('name_class')}</span>
-                </div>
-              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {students.map((student, index) => (
-              <tr key={student.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {(currentPage - 1) * itemsPerPage + index + 1}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{student.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{student.nis_student}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classes.find(cls => cls.id_class === student.id_class)?.name_class || '-'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {Object.entries(
+    students.reduce((acc, student) => {
+      const className = classes.find(cls => cls.id_class === student.id_class)?.name_class || 'Unknown';
+      if (!acc[className]) acc[className] = [];
+      acc[className].push(student);
+      return acc;
+    }, {})
+  ).map(([className, studentList]) =>
+    studentList.map((student, idx) => (
+      <tr key={student.id}>
+        <td className="px-6 py-4 whitespace-nowrap">
+          {(currentPage - 1) * itemsPerPage + idx + 1}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          {idx === 0 ? className : ''}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">{student.name}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{student.nis_student}</td>
+      </tr>
+    ))
+  )}
+</tbody>
+
         </table>
       </div>
 
